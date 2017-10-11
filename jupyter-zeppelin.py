@@ -5,7 +5,6 @@ import json
 import html
 import nbformat
 import codecs
-from aws.s3 import S3
 from StringIO import StringIO
 
 MD = re.compile(r'%md\s')
@@ -14,18 +13,12 @@ UNKNOWN_MAGIC = re.compile(r'%\w+\s')
 HTML = re.compile(r'%html\s')
 
 def read_io(path):
-    """Reads the contents of a local or S3 path into a StringIO.
+    """Reads the contents of a local path into a StringIO.
     """
     note = StringIO()
-    if path.startswith("s3://"):
-        s3 = S3(env='prod')
-        for line in s3.read(path):
+    with open(path) as local:
+        for line in local.readlines():
             note.write(line)
-            note.write("\n")
-    else:
-        with open(path) as local:
-            for line in local.readlines():
-                note.write(line)
 
     note.seek(0)
 
