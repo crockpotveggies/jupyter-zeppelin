@@ -1,7 +1,7 @@
 import os, sys
 import re
 import csv
-import json
+import simplejson as json
 import html
 import nbformat
 import codecs
